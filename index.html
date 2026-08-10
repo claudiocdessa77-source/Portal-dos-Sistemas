@@ -108,6 +108,78 @@
     white-space: nowrap;
   }
 
+  .btn-novo {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 11px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-novo:hover { background: #223454; }
+
+  .form-novo {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  .campo label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .campo input {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .campo-inline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .form-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-primario, .btn-secundario {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--line);
+  }
+  .btn-primario {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .btn-primario:hover { background: #223454; }
+  .btn-primario:disabled { opacity: 0.6; cursor: default; }
+  .btn-secundario { background: var(--surface); color: var(--muted); }
+  .form-erro { font-size: 12.5px; color: #A13D2B; margin: 0; }
+
   .registro {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -128,11 +200,10 @@
     transition: background-color 0.15s ease;
   }
   .linha:last-child { border-bottom: none; }
-  .linha:not(.pendente):hover,
-  .linha:not(.pendente):focus-visible {
+  .linha:hover,
+  .linha:focus-visible {
     background: var(--hover);
   }
-  .linha.pendente { cursor: default; }
 
   .protocolo { grid-area: protocolo; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 4px; }
   .protocolo .num { font-size: 14.5px; font-weight: 700; color: var(--ink); }
@@ -141,7 +212,6 @@
   .conteudo { grid-area: conteudo; min-width: 0; }
   .conteudo h2 { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin-bottom: 4px; }
   .conteudo p { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
-  .conteudo p.aviso { margin-top: 6px; font-size: 12px; font-style: italic; color: var(--gold-deep); }
 
   .selo {
     grid-area: selo;
@@ -155,15 +225,14 @@
     color: var(--muted);
     transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
-  .linha:not(.pendente):hover .selo,
-  .linha:not(.pendente):focus-visible .selo {
+  .linha:hover .selo,
+  .linha:focus-visible .selo {
     border-style: solid;
     border-color: var(--ink);
     background: var(--ink);
     color: #fff;
     transform: rotate(-6deg);
   }
-  .linha.pendente .selo { opacity: 0.55; }
 
   @media (prefers-reduced-motion: reduce) {
     .linha, .selo { transition: none !important; }
@@ -206,6 +275,9 @@
     }
     .protocolo { flex-direction: row; align-items: center; gap: 10px; }
     .selo { width: 46px; height: 46px; font-size: 9px; }
+    .barra { align-items: stretch; }
+    .btn-novo { width: 100%; }
+    .campo-inline { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -222,115 +294,187 @@
 <main>
   <div class="barra">
     <input id="busca" type="text" placeholder="Buscar por nome ou área..." aria-label="Buscar sistema" />
+    <button type="button" id="btnNovo" class="btn-novo">+ Novo sistema</button>
     <span class="contagem" id="contagem"></span>
   </div>
+
+  <form id="formNovo" class="form-novo" hidden>
+    <div class="campo">
+      <label for="fNome">Nome do sistema</label>
+      <input id="fNome" required />
+    </div>
+    <div class="campo">
+      <label for="fDescricao">Descrição</label>
+      <input id="fDescricao" required />
+    </div>
+    <div class="campo-inline">
+      <div class="campo">
+        <label for="fCategoria">Categoria</label>
+        <input id="fCategoria" required />
+      </div>
+      <div class="campo">
+        <label for="fUrl">URL</label>
+        <input id="fUrl" type="url" required placeholder="https://..." />
+      </div>
+    </div>
+    <p id="formErro" class="form-erro" hidden></p>
+    <div class="form-acoes">
+      <button type="button" id="btnCancelar" class="btn-secundario">Cancelar</button>
+      <button type="submit" class="btn-primario">Salvar sistema</button>
+    </div>
+  </form>
+
   <div class="registro" id="registro"></div>
 </main>
 
 <footer>
-  Para adicionar um sistema, edite o array <code>sistemas</code> no código-fonte deste arquivo.
+  Use "+ Novo sistema" para adicionar ao registro — nenhuma edição neste arquivo é necessária.
 </footer>
 
 <script>
-  // Edite esta lista para adicionar, remover ou corrigir sistemas.
-  // Uma URL contendo "SUBSTITUA" é tratada como pendente e fica inativa até ser corrigida.
-  const sistemas = [
-    {
-      numero: 1,
-      sigla: "SCA",
-      nome: "Sistema de Controle de Atendimento",
-      descricao: "Fila e atendimento da CPM, com sincronização em tempo real via Firebase.",
-      categoria: "Atendimento",
-      url: "https://scacpm.vercel.app"
-    },
-    {
-      numero: 2,
-      sigla: "SEI",
-      nome: "Painel de Processos SEI",
-      descricao: "Busca avançada, dashboards e dados de equipe complementares ao SEI.",
-      categoria: "Processos",
-      url: "https://SUBSTITUA-URL-DO-SEI.vercel.app"
-    },
-    {
-      numero: 3,
-      sigla: "SCC",
-      nome: "Sistema de Controle de Convocação",
-      descricao: "Candidatos convocados, checklist de documentos e lotes de convocação.",
-      categoria: "Convocação",
-      url: "https://SUBSTITUA-URL-DO-SCC.vercel.app"
-    },
-    {
-      numero: 4,
-      sigla: "FAC",
-      nome: "Sistema de Facilitação",
-      descricao: "Carências e vacâncias de pessoal da região NTE 26.",
-      categoria: "Pessoal",
-      url: "https://SUBSTITUA-URL-DA-FACILITACAO.vercel.app"
-    },
-    {
-      numero: 5,
-      sigla: "SAGP",
-      nome: "Sistema de Acompanhamento e Gestão de Profissionais",
-      descricao: "Situação funcional, contatos e decisões (desligamento, bloqueio, remoção, relotação) de profissionais sem lotação ativa.",
-      categoria: "Acompanhamento",
-      url: "https://sagp.vercel.app"
-    }
-  ];
+  // URL do Realtime Database (Firebase) que guarda o registro de sistemas.
+  // Crie um projeto Firebase novo e dedicado a isso (Realtime Database) e cole a databaseURL abaixo.
+  const REGISTRY_URL = 'https://meuportalcpm-default-rtdb.firebaseio.com';
 
-  const ano = new Date().getFullYear();
   const container = document.getElementById('registro');
   const contagem = document.getElementById('contagem');
   const busca = document.getElementById('busca');
+  let sistemas = [];
 
-  function formatarNumero(n) {
-    return 'Nº ' + String(n).padStart(3, '0') + '/' + ano;
+  function formatarNumero(n, anoRegistro) {
+    return 'Nº ' + String(n).padStart(3, '0') + '/' + anoRegistro;
   }
 
   function criarLinha(s) {
-    const pendente = s.url.includes('SUBSTITUA');
-    const el = document.createElement(pendente ? 'div' : 'a');
-    el.className = 'linha' + (pendente ? ' pendente' : '');
-    if (!pendente) {
-      el.href = s.url;
-      el.target = '_blank';
-      el.rel = 'noopener';
-    }
+    const el = document.createElement('a');
+    el.className = 'linha';
+    el.href = s.url;
+    el.target = '_blank';
+    el.rel = 'noopener';
     el.innerHTML =
       '<div class="protocolo">' +
-        '<span class="num">' + (pendente ? 'S/ Nº' : formatarNumero(s.numero)) + '</span>' +
-        '<span class="cat">' + s.categoria + '</span>' +
+        '<span class="num">' + formatarNumero(s._numero, s._ano) + '</span>' +
+        '<span class="cat">' + (s.categoria || '') + '</span>' +
       '</div>' +
       '<div class="conteudo">' +
         '<h2>' + s.nome + '</h2>' +
         '<p>' + s.descricao + '</p>' +
-        (pendente ? '<p class="aviso">Aguardando link — adicione a URL no array "sistemas".</p>' : '') +
       '</div>' +
-      '<div class="selo">' + (pendente ? '—' : 'ABRIR') + '</div>';
+      '<div class="selo">ABRIR</div>';
     return el;
   }
 
-  function renderizar(lista) {
-    container.innerHTML = '';
+  function mostrarMensagem(html) {
+    container.innerHTML = '<div class="vazio">' + html + '</div>';
+  }
+
+  function renderizar(lista, termo) {
     if (lista.length === 0) {
-      const vazio = document.createElement('div');
-      vazio.className = 'vazio';
-      vazio.textContent = 'Nenhum sistema encontrado para esse termo.';
-      container.appendChild(vazio);
+      mostrarMensagem(termo ? 'Nenhum sistema encontrado para esse termo.' : 'Nenhum sistema registrado ainda.');
     } else {
+      container.innerHTML = '';
       lista.forEach(function (s) { container.appendChild(criarLinha(s)); });
     }
     contagem.textContent = lista.length + ' de ' + sistemas.length + ' sistemas';
   }
 
+  function carregar() {
+    mostrarMensagem('Carregando registro...');
+    fetch(REGISTRY_URL + '/sistemas.json')
+      .then(function (r) {
+        if (!r.ok) throw new Error('Falha ao carregar');
+        return r.json();
+      })
+      .then(function (dados) {
+        const anoPadrao = String(new Date().getFullYear());
+        const lista = Object.keys(dados || {}).map(function (chave) { return dados[chave]; });
+        lista.sort(function (a, b) { return (a.criadoEm || '').localeCompare(b.criadoEm || ''); });
+        lista.forEach(function (s, i) {
+          s._numero = i + 1;
+          s._ano = (s.criadoEm || '').slice(0, 4) || anoPadrao;
+        });
+        sistemas = lista;
+        renderizar(sistemas);
+      })
+      .catch(function () {
+        sistemas = [];
+        mostrarMensagem('Não foi possível carregar o registro.<br><span style="opacity:.7">Confira a REGISTRY_URL no código-fonte.</span>');
+        contagem.textContent = '';
+      });
+  }
+
   busca.addEventListener('input', function () {
     const termo = busca.value.trim().toLowerCase();
     const filtrado = sistemas.filter(function (s) {
-      return (s.nome + ' ' + s.descricao + ' ' + s.categoria + ' ' + s.sigla).toLowerCase().includes(termo);
+      return (s.nome + ' ' + s.descricao + ' ' + (s.categoria || '')).toLowerCase().includes(termo);
     });
-    renderizar(filtrado);
+    renderizar(filtrado, termo);
   });
 
-  renderizar(sistemas);
+  const btnNovo = document.getElementById('btnNovo');
+  const formNovo = document.getElementById('formNovo');
+  const btnCancelar = document.getElementById('btnCancelar');
+  const formErro = document.getElementById('formErro');
+
+  btnNovo.addEventListener('click', function () {
+    formNovo.hidden = !formNovo.hidden;
+    if (!formNovo.hidden) document.getElementById('fNome').focus();
+  });
+
+  btnCancelar.addEventListener('click', function () {
+    formNovo.reset();
+    formNovo.hidden = true;
+    formErro.hidden = true;
+  });
+
+  function gerarSlug(nome) {
+    const base = nome
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (base || 'sistema') + '-' + Date.now().toString(36);
+  }
+
+  formNovo.addEventListener('submit', function (e) {
+    e.preventDefault();
+    formErro.hidden = true;
+
+    const nome = document.getElementById('fNome').value.trim();
+    const descricao = document.getElementById('fDescricao').value.trim();
+    const categoria = document.getElementById('fCategoria').value.trim();
+    const url = document.getElementById('fUrl').value.trim();
+    if (!nome || !descricao || !categoria || !url) return;
+
+    const slug = gerarSlug(nome);
+    const dados = { nome: nome, descricao: descricao, categoria: categoria, url: url, criadoEm: new Date().toISOString() };
+
+    const btnSalvar = formNovo.querySelector('.btn-primario');
+    btnSalvar.disabled = true;
+    btnSalvar.textContent = 'Salvando...';
+
+    fetch(REGISTRY_URL + '/sistemas/' + slug + '.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('Falha ao salvar');
+        formNovo.reset();
+        formNovo.hidden = true;
+        carregar();
+      })
+      .catch(function () {
+        formErro.textContent = 'Não foi possível salvar. Confira sua conexão e tente de novo.';
+        formErro.hidden = false;
+      })
+      .finally(function () {
+        btnSalvar.disabled = false;
+        btnSalvar.textContent = 'Salvar sistema';
+      });
+  });
+
+  carregar();
 </script>
 
 </body>
