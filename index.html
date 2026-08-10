@@ -4,279 +4,228 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#16233A" />
-<title>Registro de Sistemas · CEEPLT/CPM</title>
+<title>Portal de Sistemas · CEEPLT/CPM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #16233A;
-    --muted: #5B6472;
-    --paper: #EEF1F4;
+    --muted: #64748B;
+    --bg: #F3F5FB;
     --surface: #FFFFFF;
-    --hover: #F4F7F9;
-    --line: #D9DEE3;
-    --teal: #1F6F6B;
-    --gold-bright: #E0B15C;
-    --gold-deep: #8C6C24;
-    --gold-mid: #B8903E;
-    --font-display: 'Roboto Slab', Georgia, 'Times New Roman', serif;
+    --hover: #FAFBFF;
+    --line: #E3E7F0;
+
+    --c-atendimento: #3B5BDB;    --t-atendimento: #E8ECFB;
+    --c-convocacao: #E8720C;     --t-convocacao: #FDEEE0;
+    --c-acompanhamento: #7C3AED; --t-acompanhamento: #F1E9FD;
+    --c-pessoal: #059669;        --t-pessoal: #E1F5EE;
+    --c-academico: #DB2777;      --t-academico: #FBE4EF;
+    --c-default: #64748B;        --t-default: #EEF1F4;
+
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, Menlo, monospace;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
 
   * { box-sizing: border-box; }
-  body, h1, h2, p { margin: 0; }
+  body, h1, h2, p, form { margin: 0; }
 
   body {
-    font-family: var(--font-body);
-    background: var(--paper);
+    font-family: var(--font-display);
+    background: var(--bg);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
   }
-
   a { color: inherit; }
-
-  :focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 3px;
-  }
+  button, input { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   header.topo {
-    background: var(--ink);
+    background: linear-gradient(135deg, #16233A 0%, #2E3A6B 45%, #4C3B8F 100%);
     color: #fff;
-    padding: 48px 26px 34px;
-    position: relative;
+    padding: 44px 26px 76px;
   }
-  header.topo::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold-mid), var(--teal));
-  }
-  .cabecalho-interno { max-width: 780px; margin: 0 auto; }
+  .cabecalho-interno { max-width: 820px; margin: 0 auto; }
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--gold-bright);
+    color: #C9B8F5;
     margin-bottom: 10px;
   }
-  h1 {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .subtitulo {
-    font-size: 14px;
-    color: rgba(255,255,255,0.68);
-  }
+  h1 { font-size: 30px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .subtitulo { font-size: 14px; color: rgba(255,255,255,0.7); }
 
-  main {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 26px 26px 50px;
+  .painel-abas { max-width: 820px; margin: -30px auto 26px; padding: 0 26px; }
+  .abas {
+    display: inline-flex;
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow: 0 10px 28px rgba(22,35,58,0.16);
   }
+  .aba {
+    border: none;
+    background: transparent;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .aba.ativa { background: var(--ink); color: #fff; }
+  .aba:not(.ativa):hover { color: var(--ink); }
+
+  main { max-width: 820px; margin: 0 auto; padding: 0 26px 60px; }
 
   .barra {
     display: flex;
     align-items: center;
     gap: 14px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
   #busca {
     flex: 1;
     min-width: 200px;
     padding: 12px 16px;
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 10px;
     background: var(--surface);
-    font-family: var(--font-body);
     font-size: 14px;
     color: var(--ink);
   }
   #busca::placeholder { color: var(--muted); }
-  .contagem {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
+  .contagem { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  .grade-sistemas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
   }
 
-  .btn-novo {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    padding: 11px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--ink);
-    background: var(--ink);
-    color: #fff;
-    cursor: pointer;
-    white-space: nowrap;
+  .cartao {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
   }
-  .btn-novo:hover { background: #223454; }
+  .cartao::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--cor-tema);
+  }
+  .cartao:not(.cartao-previa):hover,
+  .cartao:not(.cartao-previa):focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(22,35,58,0.12);
+  }
+  .cartao-previa { cursor: default; }
+
+  .icone-badge {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--cor-tema);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .2s ease;
+  }
+  .icone-badge svg { width: 26px; height: 26px; }
+  .cartao:not(.cartao-previa):hover .icone-badge { transform: scale(1.08) rotate(-4deg); }
+
+  .cartao h2 { font-size: 16.5px; font-weight: 700; line-height: 1.3; }
+  .cartao p { font-size: 13.5px; line-height: 1.5; color: var(--muted); flex: 1; }
+
+  .rodape-cartao { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--cor-tema);
+    background: var(--tint-tema);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .abrir-seta { font-size: 12.5px; font-weight: 700; color: var(--cor-tema); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cartao, .icone-badge { transition: none !important; }
+    .cartao:hover { transform: none; }
+    .cartao:hover .icone-badge { transform: none; }
+  }
+
+  .vazio { grid-column: 1 / -1; padding: 52px 24px; text-align: center; color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+  .tela[hidden] { display: none; }
 
   .form-novo {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 20px 22px;
-    margin-bottom: 18px;
+    border-radius: 16px;
+    padding: 24px;
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    margin-bottom: 26px;
   }
   .campo label {
     display: block;
     font-family: var(--font-mono);
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
     color: var(--muted);
     margin-bottom: 6px;
   }
   .campo input {
     width: 100%;
-    padding: 10px 13px;
+    padding: 11px 13px;
     border: 1px solid var(--line);
-    border-radius: 8px;
-    font-family: var(--font-body);
+    border-radius: 9px;
     font-size: 14px;
     color: var(--ink);
   }
-  .campo-inline {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-  .form-acoes {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
+  .campo-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-acoes { display: flex; justify-content: flex-end; gap: 10px; }
   .btn-primario, .btn-secundario {
-    font-family: var(--font-body);
-    font-size: 13.5px;
-    font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid var(--line);
+    font-size: 13.5px; font-weight: 700; padding: 11px 20px; border-radius: 10px; cursor: pointer; border: 1px solid var(--line);
   }
-  .btn-primario {
-    background: var(--ink);
-    color: #fff;
-    border-color: var(--ink);
-  }
+  .btn-primario { background: var(--ink); color: #fff; border-color: var(--ink); }
   .btn-primario:hover { background: #223454; }
   .btn-primario:disabled { opacity: 0.6; cursor: default; }
   .btn-secundario { background: var(--surface); color: var(--muted); }
-  .form-erro { font-size: 12.5px; color: #A13D2B; margin: 0; }
+  .form-erro { font-size: 12.5px; color: #B91C1C; margin: 0; }
 
-  .registro {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(20,30,45,0.04);
-  }
-
-  .linha {
-    display: grid;
-    grid-template-columns: 104px 1fr 88px;
-    grid-template-areas: "protocolo conteudo selo";
-    align-items: center;
-    gap: 20px;
-    padding: 22px 26px;
-    text-decoration: none;
-    border-bottom: 1px solid var(--line);
-    transition: background-color 0.15s ease;
-  }
-  .linha:last-child { border-bottom: none; }
-  .linha:hover,
-  .linha:focus-visible {
-    background: var(--hover);
-  }
-
-  .protocolo { grid-area: protocolo; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 4px; }
-  .protocolo .num { font-size: 14.5px; font-weight: 700; color: var(--ink); }
-  .protocolo .cat { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); }
-
-  .conteudo { grid-area: conteudo; min-width: 0; }
-  .conteudo h2 { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-  .conteudo p { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
-
-  .selo {
-    grid-area: selo;
-    justify-self: end;
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    border: 2px dashed var(--line);
-    display: flex; align-items: center; justify-content: center;
+  .preview-label {
     font-family: var(--font-mono);
-    font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em;
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--muted);
-    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    margin-bottom: 12px;
+    display: block;
   }
-  .linha:hover .selo,
-  .linha:focus-visible .selo {
-    border-style: solid;
-    border-color: var(--ink);
-    background: var(--ink);
-    color: #fff;
-    transform: rotate(-6deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .linha, .selo { transition: none !important; }
-    .linha:hover .selo { transform: none; }
-  }
-
-  .vazio {
-    padding: 52px 24px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
+  .preview-wrap .grade-sistemas { grid-template-columns: minmax(260px, 340px); }
 
   footer {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 4px 26px 40px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--muted);
-    text-align: center;
-  }
-  footer code {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 1px 5px;
+    max-width: 820px; margin: 0 auto; padding: 4px 26px 44px;
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); text-align: center;
   }
 
   @media (max-width: 640px) {
-    header.topo { padding: 36px 20px 28px; }
+    header.topo { padding: 34px 20px 70px; }
     h1 { font-size: 24px; }
-    main { padding: 22px 18px 40px; }
-    .linha {
-      grid-template-columns: 1fr auto;
-      grid-template-areas: "protocolo selo" "conteudo conteudo";
-      padding: 18px 20px;
-      gap: 8px 14px;
-    }
-    .protocolo { flex-direction: row; align-items: center; gap: 10px; }
-    .selo { width: 46px; height: 46px; font-size: 9px; }
+    main { padding: 0 18px 44px; }
+    .painel-abas { padding: 0 18px; }
     .barra { align-items: stretch; }
-    .btn-novo { width: 100%; }
     .campo-inline { grid-template-columns: 1fr; }
   }
 </style>
@@ -286,81 +235,124 @@
 <header class="topo">
   <div class="cabecalho-interno">
     <div class="eyebrow">CEEPLT / CPM · Secretaria da Educação da Bahia</div>
-    <h1>Registro de Sistemas</h1>
+    <h1>Portal de Sistemas</h1>
     <p class="subtitulo">Acesso direto às ferramentas internas em operação</p>
   </div>
 </header>
 
-<main>
-  <div class="barra">
-    <input id="busca" type="text" placeholder="Buscar por nome ou área..." aria-label="Buscar sistema" />
-    <button type="button" id="btnNovo" class="btn-novo">+ Novo sistema</button>
-    <span class="contagem" id="contagem"></span>
+<div class="painel-abas">
+  <div class="abas">
+    <button type="button" class="aba ativa" data-aba="sistemas">Sistemas</button>
+    <button type="button" class="aba" data-aba="adicionar">+ Adicionar Sistema</button>
   </div>
+</div>
 
-  <form id="formNovo" class="form-novo" hidden>
-    <div class="campo">
-      <label for="fNome">Nome do sistema</label>
-      <input id="fNome" required />
+<main>
+  <section id="telaSistemas" class="tela">
+    <div class="barra">
+      <input id="busca" type="text" placeholder="Buscar por nome ou área..." aria-label="Buscar sistema" />
+      <span class="contagem" id="contagem"></span>
     </div>
-    <div class="campo">
-      <label for="fDescricao">Descrição</label>
-      <input id="fDescricao" required />
-    </div>
-    <div class="campo-inline">
+    <div class="grade-sistemas" id="registro"></div>
+  </section>
+
+  <section id="telaAdicionar" class="tela" hidden>
+    <form id="formNovo" class="form-novo">
       <div class="campo">
-        <label for="fCategoria">Categoria</label>
-        <input id="fCategoria" required />
+        <label for="fNome">Nome do sistema</label>
+        <input id="fNome" required />
       </div>
       <div class="campo">
-        <label for="fUrl">URL</label>
-        <input id="fUrl" type="url" required placeholder="https://..." />
+        <label for="fDescricao">Descrição</label>
+        <input id="fDescricao" required />
       </div>
-    </div>
-    <p id="formErro" class="form-erro" hidden></p>
-    <div class="form-acoes">
-      <button type="button" id="btnCancelar" class="btn-secundario">Cancelar</button>
-      <button type="submit" class="btn-primario">Salvar sistema</button>
-    </div>
-  </form>
+      <div class="campo-inline">
+        <div class="campo">
+          <label for="fCategoria">Categoria</label>
+          <input id="fCategoria" list="categoriasSugeridas" required placeholder="Ex: Atendimento" />
+          <datalist id="categoriasSugeridas">
+            <option value="Atendimento">
+            <option value="Convocação">
+            <option value="Acompanhamento">
+            <option value="Pessoal">
+            <option value="Acadêmico">
+          </datalist>
+        </div>
+        <div class="campo">
+          <label for="fUrl">URL</label>
+          <input id="fUrl" type="url" required placeholder="https://..." />
+        </div>
+      </div>
+      <p id="formErro" class="form-erro" hidden></p>
+      <div class="form-acoes">
+        <button type="button" id="btnLimpar" class="btn-secundario">Limpar</button>
+        <button type="submit" class="btn-primario">Salvar sistema</button>
+      </div>
+    </form>
 
-  <div class="registro" id="registro"></div>
+    <div class="preview-wrap">
+      <span class="preview-label">Pré-visualização</span>
+      <div class="grade-sistemas" id="preview"></div>
+    </div>
+  </section>
 </main>
 
 <footer>
-  Use "+ Novo sistema" para adicionar ao registro — nenhuma edição neste arquivo é necessária.
+  Use "+ Adicionar Sistema" para incluir novos sistemas no registro.
 </footer>
 
 <script>
-  // URL do Realtime Database (Firebase) que guarda o registro de sistemas.
-  // Crie um projeto Firebase novo e dedicado a isso (Realtime Database) e cole a databaseURL abaixo.
   const REGISTRY_URL = 'https://meuportalcpm-default-rtdb.firebaseio.com';
+
+  const ICONES = {
+    ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a2 2 0 1 0 0 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a2 2 0 1 0 0-4Z"/><path d="M13 5v3M13 16v3M13 10.5v3"/></svg>',
+    megafone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-6v14L3 13v-2Z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>',
+    userCheck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 11 2 2 4-4"/></svg>',
+    maleta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    formatura: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>',
+    grade: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>'
+  };
+
+  const TEMAS = {
+    atendimento: { cor: 'var(--c-atendimento)', tint: 'var(--t-atendimento)', icone: ICONES.ticket },
+    convocacao: { cor: 'var(--c-convocacao)', tint: 'var(--t-convocacao)', icone: ICONES.megafone },
+    acompanhamento: { cor: 'var(--c-acompanhamento)', tint: 'var(--t-acompanhamento)', icone: ICONES.userCheck },
+    pessoal: { cor: 'var(--c-pessoal)', tint: 'var(--t-pessoal)', icone: ICONES.maleta },
+    academico: { cor: 'var(--c-academico)', tint: 'var(--t-academico)', icone: ICONES.formatura }
+  };
+  const TEMA_PADRAO = { cor: 'var(--c-default)', tint: 'var(--t-default)', icone: ICONES.grade };
+
+  function normalizarChave(s) {
+    return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+  function obterTema(categoria) {
+    return TEMAS[normalizarChave(categoria)] || TEMA_PADRAO;
+  }
 
   const container = document.getElementById('registro');
   const contagem = document.getElementById('contagem');
   const busca = document.getElementById('busca');
   let sistemas = [];
 
-  function formatarNumero(n, anoRegistro) {
-    return 'Nº ' + String(n).padStart(3, '0') + '/' + anoRegistro;
-  }
-
-  function criarLinha(s) {
-    const el = document.createElement('a');
-    el.className = 'linha';
-    el.href = s.url;
-    el.target = '_blank';
-    el.rel = 'noopener';
+  function criarCartao(s, apenasPreview) {
+    const tema = obterTema(s.categoria);
+    const el = document.createElement(apenasPreview ? 'div' : 'a');
+    el.className = 'cartao' + (apenasPreview ? ' cartao-previa' : '');
+    if (!apenasPreview) {
+      el.href = s.url;
+      el.target = '_blank';
+      el.rel = 'noopener';
+    }
+    el.style.setProperty('--cor-tema', tema.cor);
+    el.style.setProperty('--tint-tema', tema.tint);
     el.innerHTML =
-      '<div class="protocolo">' +
-        '<span class="num">' + formatarNumero(s._numero, s._ano) + '</span>' +
-        '<span class="cat">' + (s.categoria || '') + '</span>' +
-      '</div>' +
-      '<div class="conteudo">' +
-        '<h2>' + s.nome + '</h2>' +
-        '<p>' + s.descricao + '</p>' +
-      '</div>' +
-      '<div class="selo">ABRIR</div>';
+      '<div class="icone-badge">' + tema.icone + '</div>' +
+      '<h2>' + s.nome + '</h2>' +
+      '<p>' + s.descricao + '</p>' +
+      '<div class="rodape-cartao">' +
+        '<span class="chip">' + (s.categoria || 'Geral') + '</span>' +
+        (apenasPreview ? '' : '<span class="abrir-seta">Abrir →</span>') +
+      '</div>';
     return el;
   }
 
@@ -373,7 +365,7 @@
       mostrarMensagem(termo ? 'Nenhum sistema encontrado para esse termo.' : 'Nenhum sistema registrado ainda.');
     } else {
       container.innerHTML = '';
-      lista.forEach(function (s) { container.appendChild(criarLinha(s)); });
+      lista.forEach(function (s) { container.appendChild(criarCartao(s)); });
     }
     contagem.textContent = lista.length + ' de ' + sistemas.length + ' sistemas';
   }
@@ -386,13 +378,8 @@
         return r.json();
       })
       .then(function (dados) {
-        const anoPadrao = String(new Date().getFullYear());
         const lista = Object.keys(dados || {}).map(function (chave) { return dados[chave]; });
-        lista.sort(function (a, b) { return (a.criadoEm || '').localeCompare(b.criadoEm || ''); });
-        lista.forEach(function (s, i) {
-          s._numero = i + 1;
-          s._ano = (s.criadoEm || '').slice(0, 4) || anoPadrao;
-        });
+        lista.sort(function (a, b) { return (a.nome || '').localeCompare(b.nome || '', 'pt-BR'); });
         sistemas = lista;
         renderizar(sistemas);
       })
@@ -411,28 +398,42 @@
     renderizar(filtrado, termo);
   });
 
-  const btnNovo = document.getElementById('btnNovo');
-  const formNovo = document.getElementById('formNovo');
-  const btnCancelar = document.getElementById('btnCancelar');
-  const formErro = document.getElementById('formErro');
-
-  btnNovo.addEventListener('click', function () {
-    formNovo.hidden = !formNovo.hidden;
-    if (!formNovo.hidden) document.getElementById('fNome').focus();
+  // Abas
+  const abas = document.querySelectorAll('.aba');
+  const telas = { sistemas: document.getElementById('telaSistemas'), adicionar: document.getElementById('telaAdicionar') };
+  function irPara(nomeAba) {
+    abas.forEach(function (b) { b.classList.toggle('ativa', b.dataset.aba === nomeAba); });
+    Object.keys(telas).forEach(function (k) { telas[k].hidden = (k !== nomeAba); });
+  }
+  abas.forEach(function (btn) {
+    btn.addEventListener('click', function () { irPara(btn.dataset.aba); });
   });
 
-  btnCancelar.addEventListener('click', function () {
+  // Formulário + pré-visualização
+  const formNovo = document.getElementById('formNovo');
+  const btnLimpar = document.getElementById('btnLimpar');
+  const formErro = document.getElementById('formErro');
+  const previewEl = document.getElementById('preview');
+
+  function atualizarPreview() {
+    const nome = document.getElementById('fNome').value.trim() || 'Nome do sistema';
+    const descricao = document.getElementById('fDescricao').value.trim() || 'A descrição aparece aqui conforme você digita.';
+    const categoria = document.getElementById('fCategoria').value.trim();
+    previewEl.innerHTML = '';
+    previewEl.appendChild(criarCartao({ nome: nome, descricao: descricao, categoria: categoria, url: '#' }, true));
+  }
+  ['fNome', 'fDescricao', 'fCategoria'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', atualizarPreview);
+  });
+
+  btnLimpar.addEventListener('click', function () {
     formNovo.reset();
-    formNovo.hidden = true;
     formErro.hidden = true;
+    atualizarPreview();
   });
 
   function gerarSlug(nome) {
-    const base = nome
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+    const base = nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     return (base || 'sistema') + '-' + Date.now().toString(36);
   }
 
@@ -461,8 +462,9 @@
       .then(function (r) {
         if (!r.ok) throw new Error('Falha ao salvar');
         formNovo.reset();
-        formNovo.hidden = true;
+        atualizarPreview();
         carregar();
+        irPara('sistemas');
       })
       .catch(function () {
         formErro.textContent = 'Não foi possível salvar. Confira sua conexão e tente de novo.';
@@ -474,6 +476,7 @@
       });
   });
 
+  atualizarPreview();
   carregar();
 </script>
 
